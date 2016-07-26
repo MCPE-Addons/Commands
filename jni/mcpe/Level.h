@@ -2,10 +2,9 @@
 
 #include <memory>
 
+#include "AdventureSettings.h"
 #include "BlockSource.h"
 #include "EntityUniqueID.h"
-#include "LevelData.h"
-#include "LevelStorage.h"
 #include "MinecraftClient.h"
 #include "Mob.h"
 #include "ParticleType.h"
@@ -17,6 +16,7 @@ struct FullBlock;
 struct BlockPos;
 struct MinecraftClient;
 struct LocalPlayer : public Player { MinecraftClient* getMinecraftClient() const; };
+class LevelStorage;
 
 struct Level {
 	virtual ~Level();
@@ -27,12 +27,13 @@ struct Level {
 	virtual void addPlayer(std::unique_ptr<Player>);
 	virtual void addGlobalEntity(std::unique_ptr<Entity>);
 	
-	void* addParticle(ParticleType, const Vec3&, const Vec3&, int);
-	void* getEntity(EntityUniqueID, bool) const;
-	void* getMob(EntityUniqueID) const;
+	bool addParticle(ParticleType, const Vec3&, const Vec3&, int);
+	Entity* getEntity(EntityUniqueID, bool) const;
+	Mob* getMob(EntityUniqueID) const;
 	LocalPlayer* getLocalPlayer() const;
 	Player* getPlayer(EntityUniqueID) const;
 	Player* getPlayer(const std::string&) const;
+	bool isClientSide() const;
 	LevelStorage* getLevelStorage();
-	LevelData* getLevelData();
+	AdventureSettings* getAdventureSettings();
 };

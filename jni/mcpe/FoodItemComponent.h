@@ -19,7 +19,7 @@ struct FoodItemComponent {
 	
 	Item& item;										// 0-4
 	int nutrition;									// 4-8
-	float saturationModified;						// 8-12
+	float saturationModifier;						// 8-12
 	bool meat;										// 12-16
 	std::string eat_sound;							// 16-20
 	std::string using_converts_to;					// 20-24

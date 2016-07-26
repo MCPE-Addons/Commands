@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Block.h"
+#include "BlockID.h"
 #include "Color.h"
 #include "FoodItemComponent.h"
 #include "SeedItemComponent.h"
@@ -22,37 +23,31 @@ struct BlockID;
 class IDataInput;
 class IDataOutput;
 struct Entity;
-class Json { public: class Value {}; };
+namespace Json {
+	class Value;
+};
+struct Random;
 
 // Size: 68
 struct Item {
 	//void** vtable;							// 0-4
 	short maxStackSize;							// 4-8
 	std::string atlas;							// 8-12
-	char filler1[18 - 12];						// 12-18
+	int itemfiller1;							// 12-16
+	short itemfiller2;							// 16-18
 	short id;									// 18-20
 	std::string name;							// 20-24
-	char filler2[60 - 24];						// 24-56
+	char itemfiller3[28 - 24];					// 24-28
+	short properties;							// 28-32
+	int maxUseDuration;							// 32-36
+	BlockID renderingBlockId;					// 36-37
+	UseAnimation useAnim;						// 37-40
+	CreativeItemCategory creativeCategory;		// 40-44
+	char itemfiller4[52 - 44];					// 44-52
+	TextureUVCoordinateSet& icon;				// 52-56
 	std::unique_ptr<FoodItemComponent> food;	// 60-64
 	std::unique_ptr<SeedItemComponent> seed;	// 64-68
 	
-	// Size: 20
-	struct Tier {
-		int damageFactor;	// 0-4
-		int maxDamage;		// 4-8
-		float whoKnows;		// 12-16
-		int enchantValue;	// 16-20
-		
-		static const Item::Tier DIAMOND;
-		static const Item::Tier GOLD;
-		static const Item::Tier IRON;
-		static const Item::Tier STONE;
-		static const Item::Tier WOOD;
-		
-		ItemInstance getTierItem() const;
-	};
-	
-	virtual ~Item();
 	virtual void setIcon(const std::string&, int);
 	virtual void setIcon(const TextureUVCoordinateSet&);
 	virtual void setMaxStackSize(unsigned char);
@@ -76,7 +71,7 @@ struct Item {
 	virtual bool canDestroyInCreative() const;
 	virtual bool isLiquidClipItem(int) const;
 	virtual bool requiresInteract() const;
-	virtual void* appendFormattedHovertext(const ItemInstance&, const Player&, std::string&, bool) const;
+	virtual const std::string appendFormattedHovertext(const ItemInstance&, const Player&, std::string&, bool) const;
 	virtual bool isValidRepairItem(const ItemInstance&, const ItemInstance&);
 	virtual int getEnchantSlot() const;
 	virtual int getEnchantValue() const;
@@ -85,7 +80,7 @@ struct Item {
 	virtual bool use(ItemInstance&, Player&);
 	virtual void useOn(ItemInstance*, Player*, int, int, int, signed char, float, float, float);
 	virtual void dispense(BlockSource&, Container&, int, const Vec3&, signed char);
-	virtual void* useTimeDepleted(ItemInstance*, Level*, Player*);
+	virtual void useTimeDepleted(ItemInstance*, Level*, Player*);
 	virtual void releaseUsing(ItemInstance*, Player*, int);
 	virtual float getDestroySpeed(ItemInstance*, Block*);
 	virtual void hurtEnemy(ItemInstance*, Mob*, Mob*);
@@ -98,7 +93,7 @@ struct Item {
 	virtual int getMaxStackSize(const ItemInstance*);
 	virtual void inventoryTick(ItemInstance&, Level&, Entity&, int, bool);
 	virtual void onCraftedBy(ItemInstance&, Level&, Player&);
-	virtual std::string getInteractText(const Player&) const;
+	virtual const std::string getInteractText(const Player&) const;
 	virtual int getAnimationFrameFor(Mob&) const;
 	virtual bool isEmissive(int) const;
 	virtual const TextureUVCoordinateSet& getIcon(int, int, bool) const;
@@ -118,4 +113,178 @@ struct Item {
 	static void addCreativeItem(short, short);
 	static void initItems();
 	static void teardownItems();
+	
+	static Item* mApple;
+	static Item* mApple_enchanted;
+	static Item* mApple_gold;
+	static Item* mArrow;
+	static Item* mBed;
+	static Item* mBeef_cooked;
+	static Item* mBeef_raw;
+	static Item* mBeetroot;
+	static Item* mBeetrootSoup;
+	static Item* mBlazePowder;
+	static Item* mBlazeRod;
+	static Item* mBoat;
+	static Item* mBone;
+	static Item* mBook;
+	static Item* mBoots_chain;
+	static Item* mBoots_cloth;
+	static Item* mBoots_diamond;
+	static Item* mBoots_gold;
+	static Item* mBoots_iron;
+	static Item* mBow;
+	static Item* mBowl;
+	static Item* mBread;
+	static Item* mBrewing_stand;
+	static Item* mBrick;
+	static Item* mBucket;
+	static Item* mCake;
+	static Item* mCarrot;
+	static Item* mCarrotOnAStick;
+	static Item* mDankMemeys;
+	static Item* mCauldron;
+	static Item* mChestMinecart;
+	static Item* mChestplate_chain;
+	static Item* mChestplate_cloth;
+	static Item* mChestplate_diamond;
+	static Item* mChestplate_gold;
+	static Item* mChestplate_iron;
+	static Item* mChicken_cooked;
+	static Item* mChicken_raw;
+	static Item* mClay;
+	static Item* mClock;
+	static Item* mCoal;
+	static Item* mComparator;
+	static Item* mCompass;
+	static Item* mCookie;
+	static Item* mDiamond;
+	static Item* mDiamondHorseArmor;
+	static Item* mDoor_acacia;
+	static Item* mDoor_birch;
+	static Item* mDoor_darkoak;
+	static Item* mDoor_iron;
+	static Item* mDoor_jungle;
+	static Item* mDoor_spruce;
+	static Item* mDoor_wood;
+	static Item* mDye_powder;
+	static Item* mEgg;
+	static Item* mEmerald;
+	static Item* mEmptyMap;
+	static Item* mEnchanted_book;
+	static Item* mEnderpearl;
+	static Item* mExperiencePotionItem;
+	static Item* mFeather;
+	static Item* mFermented_spider_eye;
+	static Item* mFilledMap;
+	static Item* mFireCharge;
+	static Item* mFish_cooked_cod;
+	static Item* mFish_cooked_salmon;
+	static Item* mFish_raw_clownfish;
+	static Item* mFish_raw_cod;
+	static Item* mFish_raw_pufferfish;
+	static Item* mFish_raw_salmon;
+	static Item* mFishingRod;
+	static Item* mFlint;
+	static Item* mFlintAndSteel;
+	static Item* mFlowerPot;
+	static Item* mGhast_tear;
+	static Item* mGlass_bottle;
+	static Item* mGoldHorseArmor;
+	static Item* mGoldIngot;
+	static Item* mGold_nugget;
+	static Item* mGoldenCarrot;
+	static Item* mHatchet_diamond;
+	static Item* mHatchet_gold;
+	static Item* mHatchet_iron;
+	static Item* mHatchet_stone;
+	static Item* mHatchet_wood;
+	static Item* mHelmet_chain;
+	static Item* mHelmet_cloth;
+	static Item* mHelmet_diamond;
+	static Item* mHelmet_gold;
+	static Item* mHelmet_iron;
+	static Item* mHoe_diamond;
+	static Item* mHoe_gold;
+	static Item* mHoe_iron;
+	static Item* mHoe_stone;
+	static Item* mHoe_wood;
+	static Item* mHopper;
+	static Item* mHopper_minecart;
+	static Item* mIronHorseArmor;
+	static Item* mIronIngot;
+	static Item* mItemFrame;
+	static Item* mLead;
+	static Item* mLeather;
+	static Item* mLeatherHorseArmor;
+	static Item* mLeggings_chain;
+	static Item* mLeggings_cloth;
+	static Item* mLeggings_diamond;
+	static Item* mLeggings_gold;
+	static Item* mLeggings_iron;
+	static Item* mMagma_cream;
+	static Item* mMelon;
+	static Item* mMinecart;
+	static Item* mMobPlacer;
+	static Item* mMushroomStew;
+	static Item* mMutton_cooked;
+	static Item* mMutton_raw;
+	static Item* mNameTag;
+	static Item* mNetherQuartz;
+	static Item* mNether_wart;
+	static Item* mNetherbrick;
+	static Item* mPainting;
+	static Item* mPaper;
+	static Item* mPickAxe_diamond;
+	static Item* mPickAxe_gold;
+	static Item* mPickAxe_iron;
+	static Item* mPickAxe_stone;
+	static Item* mPickAxe_wood;
+	static Item* mPoisonous_potato;
+	static Item* mPorkChop_cooked;
+	static Item* mPorkChop_raw;
+	static Item* mPotato;
+	static Item* mPotatoBaked;
+	static Item* mPotion;
+	static Item* mPumpkingPie;
+	static Item* mRabbitCooked;
+	static Item* mRabbitFoot;
+	static Item* mRabbitHide;
+	static Item* mRabbitRaw;
+	static Item* mRabbitStew;
+	static Random* mRandom;
+	static Item* mRedStone;
+	static Item* mReeds;
+	static Item* mRepeater;
+	static Item* mRotten_flesh;
+	static Item* mSaddle;
+	static Item* mSeeds_beetroot;
+	static Item* mSeeds_melon;
+	static Item* mSeeds_pumpkin;
+	static Item* mSeeds_wheat;
+	static Item* mShears;
+	static Item* mShovel_diamond;
+	static Item* mShovel_gold;
+	static Item* mShovel_iron;
+	static Item* mShovel_stone;
+	static Item* mShovel_wood;
+	static Item* mSign;
+	static Item* mSkull;
+	static Item* mSlimeBall;
+	static Item* mSnowBall;
+	static Item* mSpeckled_melon;
+	static Item* mSpider_eye;
+	static Item* mSplash_potion;
+	static Item* mStick;
+	static Item* mString;
+	static Item* mSugar;
+	static Item* mSulphur;
+	static Item* mSword_diamond;
+	static Item* mSword_gold;
+	static Item* mSword_iron;
+	static Item* mSword_stone;
+	static Item* mSword_wood;
+	static Item* mTNTMinecart;
+	static Item* mWheat;
+	static Item* mYellowDust;
 };

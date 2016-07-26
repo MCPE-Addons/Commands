@@ -7,11 +7,14 @@
 
 #include "ClientCommands.h"
 #include "ServerCommands.h"
+#include "mcpe/ExternalFileLevelStorageSource.h"
 #include "mcpe/File.h"
+#include "mcpe/LevelData.h"
 #include "mcpe/LevelSettings.h"
 #include "mcpe/Minecraft.h"
 #include "mcpe/MinecraftClient.h"
 #include "mcpe/ServerCommandParser.h"
+#include "mcpe/Util.h"
 
 #define LOG_TAG "Commands"
 
@@ -27,8 +30,11 @@ static void MinecraftClient$init_hook(MinecraftClient* client) {
 
 std::string BackupWorld(std::vector<Token> const& args) {
 	std::string levelPath = mcclient_inst->getServer()->getLevel()->getLevelStorage()->getFullPath();
-	File::copyDirectory(levelPath, levelPath + "-b");
-	return "§aSuccessfully made a backup of your world!";
+	std::string newLevelPath = levelPath + "-b";
+	File::copyDirectory(levelPath, newLevelPath);
+	std::vector<std::string> path = Util::split(mcclient_inst->getServer()->getLevel()->getLevelStorage()->getFullPath() + "-b", '/');
+	std::string levelFolder(path[path.size() - 1]);
+	return "§aSuccessfully made a backup of your world! (World is located at minecraftWorlds/" + levelFolder + ")";
 }
 
 static void (*InGamePlayScreen$_init_real)(void*, int, int);

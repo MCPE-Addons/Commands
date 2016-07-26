@@ -9,14 +9,12 @@ struct ScreenChooser;
 class ParticleEngine;
 class Options;
 class LevelArchiver;
-class Minecraft;
+class Minecraft; // #FuckAIDE
 struct LevelSettings;
+class Player;
 
 class MinecraftClient {
 public:
-	char filler1[100];
-	Minecraft& minecraft;
-	
 	ScreenChooser* getScreenChooser() const;
 	LocalPlayer* getLocalPlayer();
 	ParticleEngine* getParticleEngine() const;
@@ -27,4 +25,5 @@ public:
 	
 	void init();
 	void startLocalServer(std::string, std::string, LevelSettings);
+	void leaveGame(bool);
 };

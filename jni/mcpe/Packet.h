@@ -4,8 +4,12 @@
 #include <vector>
 #include <memory>
 
+#include "Abilities.h"
+#include "AdventureSettings.h"
+
 #define PACKET_DISCONNECT_ID 5
 #define PACKET_TEXT_ID 7
+#define PACKET_ADVENTURESETTINGS_ID 49
 
 namespace RakNet {
 	class BitStream;
@@ -41,7 +45,7 @@ public:
 	virtual void handle(const RakNet::RakNetGUID&, NetEventCallback*) const;
 };
 
-enum class TextPacketType : unsigned char {
+enum TextPacketType {
 	RAW,
 	CHAT,
 	LOCALIZABLE,
@@ -67,4 +71,16 @@ struct TextPacket : public Packet {
 	static TextPacket* createRaw(const std::string&);
 	static TextPacket* createSystemMessage(const std::string&);
 	static TextPacket* createTranslated(const std::string&, std::vector<std::string> const&);
+};
+
+struct AdventureSettingsPacket : public Packet {
+	int flags;	// I don't know lol
+	
+	virtual ~AdventureSettingsPacket();
+	virtual int getId() const;
+	virtual void write(RakNet::BitStream*) const;
+	virtual void read(RakNet::BitStream*);
+	virtual void handle(const RakNet::RakNetGUID&, NetEventCallback*) const;
+	
+	void fillIn(AdventureSettings&, Abilities&) const;
 };

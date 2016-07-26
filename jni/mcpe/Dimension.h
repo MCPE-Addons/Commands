@@ -1,8 +1,10 @@
 #pragma once
 
-#include "Weather.h"
+#include "Packet.h"
 
-struct Dimension {
-	char filler1[100];	// 0-100
-	Weather weather;	// 100-104
+struct Player;
+
+class Dimension {
+public:
+	void sendBroadcast(const Packet&, Player*);
 };

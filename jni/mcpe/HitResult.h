@@ -5,7 +5,7 @@
 #include "Vec3.h"
 
 struct HitResult {
-	enum class HitResultType : unsigned char {
+	enum HitResultType {
 		Block,
 		Entity,
 		Nothing

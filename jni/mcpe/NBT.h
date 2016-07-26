@@ -8,11 +8,8 @@ class PrintStream;
 class IDataOutput;
 class IDataInput;
 
-// Size: 8
+// Size: 4
 struct Tag {
-	// void** vtable;	// 0-4
-	std::string name;	// 4-8
-	
 	virtual ~Tag();
 	virtual void deleteChildren();
 	virtual void write(IDataOutput&) const = 0;
@@ -44,11 +41,28 @@ struct Tag {
 	Tag(const std::string&);
 };
 
+struct NamedTag : public Tag {
+	std::string name;	// 4-8
+	
+	virtual ~NamedTag();
+	virtual void deleteChildren();
+	virtual void write(IDataOutput&) const = 0;
+	virtual void load(IDataInput&) const = 0;
+	virtual std::string toString() const = 0;
+	virtual char getId() const = 0;
+	virtual bool equals(const Tag&) const;
+	virtual void print(PrintStream&) const;
+	virtual void print(const std::string&, PrintStream&) const;
+	virtual Tag* setName(const std::string&);
+	virtual std::string getName() const;
+	virtual Tag* copy() const = 0;
+};
+
 struct ListTag;
 struct TagMemoryChunk;
 
 // Size: 32
-struct CompoundTag : public Tag {
+struct CompoundTag : public NamedTag {
 	std::map<std::string, std::unique_ptr<Tag>> data; // 8-?
 	
 	virtual ~CompoundTag();
@@ -57,7 +71,10 @@ struct CompoundTag : public Tag {
 	virtual std::string toString() const;
 	virtual char getId() const;
 	virtual bool equals(const Tag&) const;
+	virtual void print(PrintStream&) const;
 	virtual void print(const std::string&, PrintStream&) const;
+	virtual Tag* setName(const std::string&);
+	virtual std::string getName() const;
 	virtual Tag* copy() const;
 	
 	bool contains(const std::string&) const;

@@ -23,7 +23,7 @@ public:
 	static void getPoint(float, float, float);
 	static void hashCode(const std::string&);
 	static bool isValidPath(const std::string&);
-	static void removeAll(std::string&, const** char, int);
+	static void removeAll(std::string&, const char**, int);
 	static void removeIllegalChars(const std::string&);
 	static void simpleFormat(const std::string&, std::vector<std::string>);
 	static std::vector<std::string> split(const std::string&, char);
@@ -39,6 +39,7 @@ public:
 	static void toInt(const std::string&, int&, int, int);
 	static std::string toLower(const std::string&);
 	static std::string toNiceString(int);
+	/*
 	static std::string toString(float);
 	static std::string toString(std::basic_string<wchar_t, std::char_traits<wchar_t>> const&);
 	static std::string toString(const std::string&);
@@ -49,6 +50,7 @@ public:
 	static std::string toString<unsigned int, (void*)0, (void*)0>(unsigned int);
 	static std::string toString<unsigned long long, (void*)0, (void*)0>(unsigned long long);
 	static std::string toString<unsigned short, (void*)0, (void*)0>(unsigned short);
+	*/
 	static std::string toUpper(const std::string&);
 	static void toWideString(const std::string&);
 	static void urlEncode(const std::string&);

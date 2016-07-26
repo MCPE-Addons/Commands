@@ -7,6 +7,8 @@
 #include "NBT.h"
 
 struct ItemEnchants;
+class Player;
+class Level;
 
 // Size: 20
 struct ItemInstance {

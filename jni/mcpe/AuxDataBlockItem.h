@@ -9,6 +9,6 @@ struct AuxDataBlockItem : public BlockItem {
 	AuxDataBlockItem(const std::string&, int, Block*);
 	
 	virtual ~AuxDataBlockItem();
-	virtual void* getLevelDataForAuxValue(int);
+	virtual int getLevelDataForAuxValue(int);
 	virtual std::string buildDescriptionName(const ItemInstance&) const;
 };
