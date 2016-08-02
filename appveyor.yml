@@ -18,5 +18,5 @@ install:
   - echo y | C:\android-sdk-windows\tools\android.bat update sdk --no-ui --all --filter extra-google-m2repository
   - echo y | C:\android-sdk-windows\tools\android.bat update sdk --no-ui --all --filter extra-android-m2repository
 build_script:
-  - cd c:\projects\android-ndk\builder && gradlew test
+  - cd c:\projects\android-ndk\builder && gradlew.bat
 test: off
